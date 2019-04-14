@@ -13,3 +13,4 @@ app.get('/', function(req, res) {
 });
 
 app.listen(8080);
+console.log("Visit app at http://localhost:8080")
