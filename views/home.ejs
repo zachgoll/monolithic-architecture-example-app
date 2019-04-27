@@ -9,8 +9,61 @@
     <body>
         <h1>Monolithic Architecture Application</h1>
         <hr>
-        <p><strong>App Type: </strong><%= data.name %></p>
-        <p><strong>Developer: </strong><%= data.author %></p>
-        <p><strong>Blog Post: </strong><a href="<%= data.blogPostUrl %>">Build Production Web App Part 4 - Architecture</a></p>
+        <form action="" id="register">
+            <input type="text" name="name" id="name" placeholder="enter name">
+            <input type="text" name="email" id="email" placeholder="enter email">
+            <button onclick="register(event)">Register</button>
+        </form>
+
+        <div id="info">
+            <p>You are registered and logged in!</p>
+            <p>Name: <span id="span-name"></span></p>
+            <p>Email: <span id="span-email"></span></p>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <script
+        src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+        crossorigin="anonymous"></script>
+
+        <script>
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+        
+        function register(event) {
+            event.preventDefault();
+            console.log("hi")
+            const name = $("#name").val();
+            const email = $("#email").val();
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/register",
+                data: JSON.stringify({ name: name, email: email }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(result){ 
+                    localStorage.setItem("email", result.email);
+                    localStorage.setItem("name", result.name);
+                    location.reload();
+                }
+            });
+        }
+
+        $(document).ready(() => {
+            if (localStorage.getItem("email")) {
+                $("#span-name").text(localStorage.getItem("name"));
+                $("#span-email").text(localStorage.getItem("email"));
+                $("#register").toggle();
+            } else {
+                $("#info").toggle();
+            }
+        });
+        
+        </script>
     </body>
 </html>
